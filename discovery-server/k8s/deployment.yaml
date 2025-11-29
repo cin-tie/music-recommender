@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: discovery-service
+      app: discovery-server
   template:
     metadata:
       labels:
-        app: discovery-service
+        app: discovery-server
     spec:
       containers:
         - name: discovery-service
