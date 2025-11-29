@@ -16,11 +16,12 @@ spec:
     spec:
       containers:
         - name: discovery-service
-          image: music-reccomender/discovery-server:latest
+          image: music-recommender/discovery-server:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8761
           env:
-            - name: EURECA_INSTANCE_HOSTNAME
+            - name: EUREKA_INSTANCE_HOSTNAME
               value: "discovery-server"
           resources:
             requests:
