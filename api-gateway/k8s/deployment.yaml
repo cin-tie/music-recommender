@@ -1,44 +1,44 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: discovery-server
+  name: api-gateway
   labels:
-    app: discovery-server
+    app: api-gateway
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: discovery-server
+      app: api-gateway
   template:
     metadata:
       labels:
-        app: discovery-server
+        app: api-gateway
     spec:
       containers:
-        - name: discovery-server
-          image: music-recommender/discovery-server:latest
+        - name: api-gateway
+          image: music-recommender/api-gateway:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 8761
+            - containerPort: 8080
           env:
-            - name: EUREKA_INSTANCE_HOSTNAME
-              value: "discovery-server"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
           readinessProbe:
             httpGet:
               path: /actuator/health
-              port: 8761
-            initialDelaySeconds: 30
+              port: 8080
+            initialDelaySeconds: 40
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /actuator/health
-              port: 8761
-            initialDelaySeconds: 60
+              port: 8080
+            initialDelaySeconds: 90
             periodSeconds: 30
           resources:
             requests:
               memory: "256Mi"
-              cpu: "250m"
+              cpu: "200m"
             limits:
               memory: "512Mi"
               cpu: "500m"

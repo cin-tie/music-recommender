@@ -16,18 +16,33 @@ spring:
           predicates:
             - Path=/auth/**, /oauth2/**, /login/**
           filters:
-            - RewritePath=/auth/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
 
 eureka:
   client:
     service-url:
-      defaultZone: http://discovery-server:8761/eureca/
+      defaultZone: http://discovery-server:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+    healthcheck:
+      enabled: true
   instance:
     prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
 
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
+    reactor.netty.http.client: INFO
