@@ -34,11 +34,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String refreshToken = client.getRefreshToken().getTokenValue();
         Instant expiresAt = client.getAccessToken().getExpiresAt();
 
-        String sporifyId = oAuth2User.getAttribute("id");
+        String spotifyId = oAuth2User.getAttribute("id");
         String email = oAuth2User.getAttribute("email");
         String displayName = oAuth2User.getAttribute("display_name");
 
-        User user = userRepository.findBySpotify_id(sporifyId).orElse(User.builder().id(sporifyId).build());
+        User user = userRepository.findBySpotify_id(spotifyId).orElse(User.builder().id(spotifyId).build());
         user.setAccess_token(accessToken);
         user.setRefresh_token(refreshToken);
         user.setEmail(email);
