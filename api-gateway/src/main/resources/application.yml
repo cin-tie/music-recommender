@@ -14,9 +14,7 @@ spring:
         - id: auth-service
           uri: lb://auth-service
           predicates:
-            - Path=/auth/**, /oauth2/**, /login/**
-          filters:
-            - StripPrefix=1
+            - Path=/auth/**
 
 eureka:
   client:
