@@ -5,7 +5,7 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:postgresql://postgres:5432/${POSTGRES_DB}}
+    url: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
@@ -20,7 +20,7 @@ spring:
             client-id: ${SPOTIFY_CLIENT_ID}
             client-secret: ${SPOTIFY_CLIENT_SECRET}
             scope: user-read-email,user-read-private
-            redirect-uri: "{baseUrl}/login/oauth2/code/spotify"
+            redirect-uri: "http://api-gateway/login/oauth2/code/spotify"
             authorization-grant-type: authorization_code
             client-name: Spotify
         provider:
