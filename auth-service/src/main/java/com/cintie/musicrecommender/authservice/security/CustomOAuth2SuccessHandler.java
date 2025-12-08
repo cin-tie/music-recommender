@@ -4,7 +4,6 @@ import com.cintie.musicrecommender.authservice.entities.User;
 import com.cintie.musicrecommender.authservice.repositories.UserRepository;
 import com.cintie.musicrecommender.authservice.services.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtService jwtService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
         OAuth2AuthorizedClient client = clientService.loadAuthorizedClient("spotify", authentication.getName());
@@ -34,7 +33,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String refreshToken = client.getRefreshToken().getTokenValue();
         Instant expiresAt = client.getAccessToken().getExpiresAt();
 
-        String spotifyId = oAuth2User.getAttribute("id");
+        Long spotifyId = Long.parseLong(oAuth2User.getAttribute("id"));
         String email = oAuth2User.getAttribute("email");
         String displayName = oAuth2User.getAttribute("display_name");
 
