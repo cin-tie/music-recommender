@@ -6,6 +6,15 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "*"
+            allowed-methods:
+              - "*"
+            allowed-headers:
+              - "*"
       discovery:
         locator:
           enabled: true
@@ -43,4 +52,4 @@ management:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: INFO
+    reactor.netty.http.client: DEBUG
