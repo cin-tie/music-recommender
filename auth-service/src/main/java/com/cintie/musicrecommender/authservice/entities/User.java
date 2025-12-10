@@ -20,35 +20,35 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String spotify_id;
+    private String spotifyId;
 
     @Column(nullable = false)
-    private String display_name;
+    private String displayName;
 
     @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String access_token;
+    private String accessToken;
 
     @Column(nullable = false)
-    private String refresh_token;
+    private String refreshToken;
 
     @Column(nullable = false)
-    private Instant token_expiry;
+    private Instant tokenExpiry;
 
     @Column(nullable = false)
-    private Instant created_at;
+    private Instant createdAt;
 
     @Column(nullable = false)
-    private Instant updated_at;
+    private Instant updatedAt;
 
     @PrePersist void onCreate(){
-        created_at = Instant.now();
-        updated_at = Instant.now();
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
     }
 
     @PreUpdate void onUpdate(){
-        updated_at = Instant.now();
+        updatedAt = Instant.now();
     }
 }

@@ -21,9 +21,9 @@ public class JwtService {
 
     public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(user.getSpotify_id())
+                .setSubject(user.getSpotifyId())
                 .claim("email", user.getEmail())
-                .claim("name", user.getDisplay_name())
+                .claim("name", user.getDisplayName())
                 .claim("role", "USER")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))

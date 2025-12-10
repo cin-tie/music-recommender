@@ -19,6 +19,9 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8081
+          envFrom:
+            - secretRef:
+                name: auth-secret
           resources:
             requests:
               memory: "256Mi"

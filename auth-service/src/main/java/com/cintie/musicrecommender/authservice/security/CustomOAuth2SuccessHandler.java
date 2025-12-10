@@ -33,16 +33,16 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String refreshToken = client.getRefreshToken().getTokenValue();
         Instant expiresAt = client.getAccessToken().getExpiresAt();
 
-        Long spotifyId = Long.parseLong(oAuth2User.getAttribute("id"));
+        String spotifyId =oAuth2User.getAttribute("id");
         String email = oAuth2User.getAttribute("email");
         String displayName = oAuth2User.getAttribute("display_name");
 
-        User user = userRepository.findBySpotify_id(spotifyId).orElse(User.builder().id(spotifyId).build());
-        user.setAccess_token(accessToken);
-        user.setRefresh_token(refreshToken);
+        User user = userRepository.findBySpotifyId(spotifyId).orElse(User.builder().spotifyId(spotifyId).build());
+        user.setAccessToken(accessToken);
+        user.setRefreshToken(refreshToken);
         user.setEmail(email);
-        user.setDisplay_name(displayName);
-        user.setToken_expiry(expiresAt);
+        user.setDisplayName(displayName);
+        user.setTokenExpiry(expiresAt);
 
         userRepository.save(user);
         String jwt = jwtService.generateToken(user);
