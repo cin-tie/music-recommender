@@ -42,4 +42,19 @@ public class JwtService {
             return false;
         }
     }
+
+    public String getSpotifyId(String token) {
+        try {
+            String spotifyId = Jwts.parserBuilder()
+                    .setSigningKey(secret)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+            return spotifyId;
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
 }
