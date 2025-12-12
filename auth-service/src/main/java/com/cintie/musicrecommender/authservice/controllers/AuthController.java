@@ -29,7 +29,7 @@ public class AuthController {
     @GetMapping("/login")
     public ResponseEntity<Void> login(){
         return ResponseEntity.status(302)
-                .header("Location", "/oauth2/authorization/spotify")
+                .header("Location", "http://localhost:8081/oauth2/authorization/spotify")
                 .build();
     }
 
