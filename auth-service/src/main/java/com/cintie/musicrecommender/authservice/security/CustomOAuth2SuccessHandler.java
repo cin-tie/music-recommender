@@ -29,13 +29,24 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
         OAuth2AuthorizedClient client = clientService.loadAuthorizedClient("spotify", authentication.getName());
+        if (client == null || client.getAccessToken() == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "OAuth2 client not found");
+            return;
+        }
+
         String accessToken = client.getAccessToken().getTokenValue();
-        String refreshToken = client.getRefreshToken().getTokenValue();
+        String refreshToken = client.getRefreshToken() != null ? client.getRefreshToken().getTokenValue() : null;
         Instant expiresAt = client.getAccessToken().getExpiresAt();
 
         String spotifyId =oAuth2User.getAttribute("id");
-        String email = oAuth2User.getAttribute("email");
-        String displayName = oAuth2User.getAttribute("display_name");
+        if (spotifyId == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Spotify user ID not found");
+            return;
+        }
+    
+        String email = oAuth2User.getAttribute("email") != null ? oAuth2User.getAttribute("email") : "";
+        String displayName = oAuth2User.getAttribute("display_name") != null ? oAuth2User.getAttribute("display_name") : "";
+
 
         User user = userRepository.findBySpotifyId(spotifyId).orElse(User.builder().spotifyId(spotifyId).build());
         user.setAccessToken(accessToken);

@@ -33,7 +33,7 @@ public class AuthController {
                 .build();
     }
 
-    @GetMapping("/validate")
+    @PostMapping("/validate")
     public ResponseEntity<ValidateResponse> validate(@RequestBody ValidateRequest request){
         String token = request.token();
         if(jwtService.validateToken(token)){
@@ -42,7 +42,7 @@ public class AuthController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/profile")
+    @PostMapping("/profile")
     public ResponseEntity<ProfileResponse> profile(@RequestBody ProfileRequest request){
         String token = request.token();
         if(!jwtService.validateToken(token)){
