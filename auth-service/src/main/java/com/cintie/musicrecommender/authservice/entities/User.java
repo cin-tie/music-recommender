@@ -3,7 +3,6 @@ package com.cintie.musicrecommender.authservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 
 
@@ -19,19 +18,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, columnDefinition = "TEXT")
     private String spotifyId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 128)
     private String displayName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 128)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String accessToken;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String refreshToken;
 
     @Column(nullable = false)
