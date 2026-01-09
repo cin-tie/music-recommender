@@ -25,6 +25,13 @@ spring:
           predicates:
             - Path=/auth/**
 
+      #  TODO: Needed services
+      #  - id: music-service
+      #    uri: lb://music-service
+      #    predicates:
+      #      - Path=/api/**
+
+
 eureka:
   client:
     service-url:
