@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway
+  name: auth-service
   labels:
-    app: api-gateway
+    app: auth-service
 spec:
   selector:
     matchLabels:
-      app: api-gateway
+      app: auth-service
   template:
     metadata:
       labels:
-        app: api-gateway
+        app: auth-service
     spec:
       containers:
-        - name: api-gateway
-          image: music-recommender/api-gateway:latest
+        - name: auth-service
+          image: music-recommender/auth-service:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 8080
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: "docker"
+            - containerPort: 8081
+          envFrom:
+            - secretRef:
+                name: auth-secret
           resources:
             requests:
               memory: "256Mi"
