@@ -56,6 +56,10 @@ management:
     health:
       show-details: always
 
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
