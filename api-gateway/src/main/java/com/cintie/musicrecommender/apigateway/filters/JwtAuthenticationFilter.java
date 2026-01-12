@@ -1,5 +1,6 @@
 package com.cintie.musicrecommender.apigateway.filters;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,12 +32,23 @@ public class JwtAuthenticationFilter implements WebFilter {
 
         String token = authHeader.substring(7);
         try {
-            Jwts.parserBuilder()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(secret)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token)
+                    .getBody();
 
-            return chain.filter(exchange);
+            String spotifyId = claims.getSubject();
+
+            ServerWebExchange mutatedExchange = exchange.mutate()
+                    .request(
+                            exchange.getRequest().mutate()
+                                    .header("X-User-Id", spotifyId)
+                                    .build()
+                    )
+                    .build();
+
+            return chain.filter(mutatedExchange);
         } catch (Exception e) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();

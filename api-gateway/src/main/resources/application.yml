@@ -25,6 +25,11 @@ spring:
           predicates:
             - Path=/auth/**
 
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+
       #  TODO: Needed services
       #  - id: music-service
       #    uri: lb://music-service
