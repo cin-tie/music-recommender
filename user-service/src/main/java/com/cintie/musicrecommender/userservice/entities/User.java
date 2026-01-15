@@ -15,28 +15,28 @@ import java.time.Instant;
 @Builder
 public class User {
     @Id
-    @Column(unique = true)
-    private String id;
+    @Column(nullable = false, updatable = false)
+    private String spotifyId;
 
-    @Column(nullable = false)
+    @Column
     private String displayName;
 
-    @Column(nullable = false)
+    @Column
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String country;
 
-    @Column(nullable = false)
+    @Column
     private String product;
 
-    @Column(nullable = false)
+    @Column
     private Boolean explicitFilterEnabled;
 
-    @Column(nullable = false)
+    @Column
     private Boolean explicitFilterLocked;
 
-    @Column(nullable = false)
+    @Column
     private Integer followers;
 
     @Column
