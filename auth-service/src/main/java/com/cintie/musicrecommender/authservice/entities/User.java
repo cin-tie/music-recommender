@@ -18,19 +18,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String spotifyId;
 
-    @Column(nullable = false, length = 128)
+    @Column(nullable = false)
     private String displayName;
 
-    @Column(nullable = false, length = 128)
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String accessToken;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String refreshToken;
 
     @Column(nullable = false)

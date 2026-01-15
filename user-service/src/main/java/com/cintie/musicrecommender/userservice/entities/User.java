@@ -15,26 +15,32 @@ import java.time.Instant;
 @Builder
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true, columnDefinition = "TEXT")
-    private String spotifyId;
-
-    @Column(nullable = false, length = 128)
-    private String displayName;
-
-    @Column(nullable = false, length = 128)
-    private String email;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String accessToken;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String refreshToken;
+    @Column(unique = true)
+    private String id;
 
     @Column(nullable = false)
-    private Instant tokenExpiry;
+    private String displayName;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private String product;
+
+    @Column(nullable = false)
+    private Boolean explicitFilterEnabled;
+
+    @Column(nullable = false)
+    private Boolean explicitFilterLocked;
+
+    @Column(nullable = false)
+    private Integer followers;
+
+    @Column
+    private String imageUrl;
 
     @Column(nullable = false)
     private Instant createdAt;
