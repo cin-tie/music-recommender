@@ -3,7 +3,7 @@ package com.cintie.musicrecommender.authservice.security;
 import com.cintie.musicrecommender.authservice.dto.UserSyncRequest;
 import com.cintie.musicrecommender.authservice.entities.User;
 import com.cintie.musicrecommender.authservice.repositories.UserRepository;
-import com.cintie.musicrecommender.authservice.services.JwtService;
+import com.cintie.musicrecommender.authservice.services.UserJwtService;
 import com.cintie.musicrecommender.authservice.services.UserServiceClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final OAuth2AuthorizedClientService clientService;
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+    private final UserJwtService userJwtService;
     private final UserServiceClient userServiceClient;
 
     @Override
@@ -87,7 +87,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         user.setTokenExpiry(expiresAt);
 
         userRepository.save(user);
-        String jwt = jwtService.generateToken(user);
+        String jwt = userJwtService.generateToken(user);
 
         response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getWriter(), new JwtResponse(jwt));

@@ -6,7 +6,7 @@ import com.cintie.musicrecommender.authservice.dto.ValidateRequest;
 import com.cintie.musicrecommender.authservice.dto.ValidateResponse;
 import com.cintie.musicrecommender.authservice.entities.User;
 import com.cintie.musicrecommender.authservice.repositories.UserRepository;
-import com.cintie.musicrecommender.authservice.services.JwtService;
+import com.cintie.musicrecommender.authservice.services.UserJwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private JwtService jwtService;
+    private UserJwtService userJwtService;
     private UserRepository userRepository;
 
     public AuthController() {
@@ -36,7 +36,7 @@ public class AuthController {
     @PostMapping("/validate")
     public ResponseEntity<ValidateResponse> validate(@RequestBody ValidateRequest request){
         String token = request.token();
-        if(jwtService.validateToken(token)){
+        if(userJwtService.validateToken(token)){
             return ResponseEntity.ok(new ValidateResponse(true));
         }
         return ResponseEntity.badRequest().build();
@@ -45,12 +45,12 @@ public class AuthController {
     @PostMapping("/profile")
     public ResponseEntity<ProfileResponse> profile(@RequestBody ProfileRequest request){
         String token = request.token();
-        if(!jwtService.validateToken(token)){
+        if(!userJwtService.validateToken(token)){
             return ResponseEntity.badRequest().build();
         }
 
         try {
-            User user = userRepository.findBySpotifyId(jwtService.getSpotifyId(token))
+            User user = userRepository.findBySpotifyId(userJwtService.getSpotifyId(token))
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
             ProfileResponse response = new ProfileResponse(user.getSpotifyId(), user.getEmail(), user.getDisplayName(), user.getCreatedAt(), user.getUpdatedAt());
