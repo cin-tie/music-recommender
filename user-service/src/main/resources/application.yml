@@ -27,3 +27,8 @@ logging:
   level:
     com.netflix.discovery: DEBUG
     org.springframework.cloud.netflix.eureka: DEBUG
+
+jwt:
+  service:
+    secret: ${JWT_SERVICE_SECRET}
+    expiration: 300000
