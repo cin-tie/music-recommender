@@ -25,6 +25,11 @@ spring:
           predicates:
             - Path=/auth/**
 
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/**
+
       #  TODO: Needed services
       #  - id: music-service
       #    uri: lb://music-service
@@ -55,6 +60,10 @@ management:
       enabled: true
     health:
       show-details: always
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
 
 logging:
   level:

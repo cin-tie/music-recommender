@@ -1,8 +1,10 @@
 package com.cintie.musicrecommender.authservice.security;
 
+import com.cintie.musicrecommender.authservice.dto.UserSyncRequest;
 import com.cintie.musicrecommender.authservice.entities.User;
 import com.cintie.musicrecommender.authservice.repositories.UserRepository;
-import com.cintie.musicrecommender.authservice.services.JwtService;
+import com.cintie.musicrecommender.authservice.services.UserJwtService;
+import com.cintie.musicrecommender.authservice.services.UserServiceClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,13 +18,16 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final OAuth2AuthorizedClientService clientService;
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+    private final UserJwtService userJwtService;
+    private final UserServiceClient userServiceClient;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -44,9 +49,35 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
             return;
         }
     
-        String email = oAuth2User.getAttribute("email") != null ? oAuth2User.getAttribute("email") : "";
-        String displayName = oAuth2User.getAttribute("display_name") != null ? oAuth2User.getAttribute("display_name") : "";
+        String email = oAuth2User.getAttribute("email");
+        String displayName = oAuth2User.getAttribute("display_name");
 
+        String country = oAuth2User.getAttribute("country");
+        String product = oAuth2User.getAttribute("product");
+
+        Map<String, Object> explicit = oAuth2User.getAttribute("explicit_content");
+        Boolean filterEnabled = explicit != null ? (Boolean) explicit.get("filter_enabled") : null;
+        Boolean filterLocked = explicit != null ? (Boolean) explicit.get("filter_locked") : null;
+
+        Map<String, Object> followersMap = oAuth2User.getAttribute("followers");
+        Integer followers = followersMap != null ? (Integer) followersMap.get("total") : null;
+
+        List<Map<String, Object>> images = oAuth2User.getAttribute("images");
+        String imageUrl = (images != null && !images.isEmpty())
+                ? (String) images.get(0).get("url")
+                : null;
+
+        userServiceClient.sync(new UserSyncRequest(
+                spotifyId,
+                displayName,
+                email,
+                country,
+                product,
+                filterEnabled,
+                filterLocked,
+                followers,
+                imageUrl
+        ));
 
         User user = userRepository.findBySpotifyId(spotifyId).orElse(User.builder().spotifyId(spotifyId).build());
         user.setAccessToken(accessToken);
@@ -56,7 +87,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         user.setTokenExpiry(expiresAt);
 
         userRepository.save(user);
-        String jwt = jwtService.generateToken(user);
+        String jwt = userJwtService.generateToken(user);
 
         response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getWriter(), new JwtResponse(jwt));

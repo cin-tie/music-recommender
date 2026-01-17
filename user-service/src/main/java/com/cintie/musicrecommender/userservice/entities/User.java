@@ -1,4 +1,4 @@
-package com.cintie.musicrecommender.authservice.entities;
+package com.cintie.musicrecommender.userservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,26 +15,32 @@ import java.time.Instant;
 @Builder
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, columnDefinition = "text")
+    @Column(nullable = false, updatable = false)
     private String spotifyId;
 
-    @Column(nullable = false, columnDefinition = "text")
+    @Column
     private String displayName;
 
-    @Column(nullable = false, columnDefinition = "text")
+    @Column
     private String email;
 
-    @Column(nullable = false, columnDefinition = "text")
-    private String accessToken;
+    @Column
+    private String country;
 
-    @Column(nullable = false, columnDefinition = "text")
-    private String refreshToken;
+    @Column
+    private String product;
 
-    @Column(nullable = false)
-    private Instant tokenExpiry;
+    @Column
+    private Boolean explicitFilterEnabled;
+
+    @Column
+    private Boolean explicitFilterLocked;
+
+    @Column
+    private Integer followers;
+
+    @Column
+    private String imageUrl;
 
     @Column(nullable = false)
     private Instant createdAt;

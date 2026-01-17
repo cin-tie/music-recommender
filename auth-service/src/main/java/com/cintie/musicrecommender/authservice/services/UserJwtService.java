@@ -11,12 +11,12 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class JwtService {
+public class UserJwtService {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.user.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.user.expiration}")
     private long expirationMs;
 
     public String generateToken(User user) {

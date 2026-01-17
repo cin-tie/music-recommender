@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway
+  name: user-service
   labels:
-    app: api-gateway
+    app: user-service
 spec:
   selector:
     matchLabels:
-      app: api-gateway
+      app: user-service
   template:
     metadata:
       labels:
-        app: api-gateway
+        app: user-service
     spec:
       containers:
-        - name: api-gateway
-          image: music-recommender/api-gateway:latest
+        - name: user-service
+          image: music-recommender/user-service:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 8080
+            - containerPort: 8888
           envFrom:
             - secretRef:
-                name: api-secret
+                name: user-secret
           resources:
             requests:
               memory: "256Mi"
