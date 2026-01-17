@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spotify-service
+  labels:
+    app: spotify-service
+spec:
+  selector:
+    matchLabels:
+      app: spotify-service
+  template:
+    metadata:
+      labels:
+        app: spotify-service
+    spec:
+      containers:
+        - name: spotify-service
+          image: music-recommender/spotify-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8800
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
