@@ -37,6 +37,8 @@ public class InternalServiceJwtFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
+        System.out.println("\n\n\n\n\nIncoming internal token: " + token);
+
 
         try{
             Claims claims = Jwts.parserBuilder()
@@ -44,11 +46,13 @@ public class InternalServiceJwtFilter extends OncePerRequestFilter {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+            System.out.println("\n\n\n\n\nIncoming internal token: " + token);
 
             if(!"SERVICE".equals(claims.get("role"))){
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
+            System.out.println("\n\n\n\n\nIncoming internal token: " + token);
 
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     claims.getSubject(), null, List.of(() -> "ROLE_SERVICE")

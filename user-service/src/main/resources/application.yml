@@ -27,6 +27,8 @@ logging:
   level:
     com.netflix.discovery: DEBUG
     org.springframework.cloud.netflix.eureka: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web.filter: DEBUG
 
 jwt:
   service:
