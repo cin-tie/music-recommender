@@ -18,46 +18,10 @@ public class AuthController {
     private UserJwtService userJwtService;
     private UserRepository userRepository;
 
-    public AuthController() {
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<String> test(){
-        return ResponseEntity.ok("test");
-    }
-
     @GetMapping("/login")
     public ResponseEntity<Void> login(){
         return ResponseEntity.status(302)
                 .header("Location", "http://localhost:8081/oauth2/authorization/spotify")
                 .build();
-    }
-
-    @PostMapping("/validate")
-    public ResponseEntity<ValidateResponse> validate(@RequestBody ValidateRequest request){
-        String token = request.token();
-        if(userJwtService.validateToken(token)){
-            return ResponseEntity.ok(new ValidateResponse(true));
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
-    @PostMapping("/profile")
-    public ResponseEntity<ProfileResponse> profile(@RequestBody ProfileRequest request){
-        String token = request.token();
-        if(!userJwtService.validateToken(token)){
-            return ResponseEntity.badRequest().build();
-        }
-
-        try {
-            User user = userRepository.findBySpotifyId(userJwtService.getSpotifyId(token))
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-            ProfileResponse response = new ProfileResponse(user.getSpotifyId(), user.getEmail(), user.getDisplayName(), user.getCreatedAt(), user.getUpdatedAt());
-
-            return ResponseEntity.ok(response);
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.badRequest().build();
-        }
     }
 }
