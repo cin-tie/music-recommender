@@ -14,5 +14,6 @@ spec:
       containers:
         - name: redis
           image: music-recommender/redis:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 6379
