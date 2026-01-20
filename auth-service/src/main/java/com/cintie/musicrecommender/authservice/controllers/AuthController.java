@@ -7,6 +7,7 @@ import com.cintie.musicrecommender.authservice.dto.ValidateResponse;
 import com.cintie.musicrecommender.authservice.entities.User;
 import com.cintie.musicrecommender.authservice.repositories.UserRepository;
 import com.cintie.musicrecommender.authservice.services.UserJwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private UserJwtService userJwtService;
     private UserRepository userRepository;
-
-    public AuthController() {
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<String> test(){
-        return ResponseEntity.ok("test");
-    }
 
     @GetMapping("/login")
     public ResponseEntity<Void> login(){
@@ -40,24 +34,5 @@ public class AuthController {
             return ResponseEntity.ok(new ValidateResponse(true));
         }
         return ResponseEntity.badRequest().build();
-    }
-
-    @PostMapping("/profile")
-    public ResponseEntity<ProfileResponse> profile(@RequestBody ProfileRequest request){
-        String token = request.token();
-        if(!userJwtService.validateToken(token)){
-            return ResponseEntity.badRequest().build();
-        }
-
-        try {
-            User user = userRepository.findBySpotifyId(userJwtService.getSpotifyId(token))
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-            ProfileResponse response = new ProfileResponse(user.getSpotifyId(), user.getEmail(), user.getDisplayName(), user.getCreatedAt(), user.getUpdatedAt());
-
-            return ResponseEntity.ok(response);
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.badRequest().build();
-        }
     }
 }

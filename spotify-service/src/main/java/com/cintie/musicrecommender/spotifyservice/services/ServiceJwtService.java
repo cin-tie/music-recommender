@@ -1,4 +1,4 @@
-package com.cintie.musicrecommender.authservice.services;
+package com.cintie.musicrecommender.spotifyservice.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

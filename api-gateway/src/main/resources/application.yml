@@ -30,6 +30,11 @@ spring:
           predicates:
             - Path=/api/user/**
 
+        - id: spotify-service
+          uri: lb://spotify-service
+          predicates:
+            - Path=/api/spotify/**
+
       #  TODO: Needed services
       #  - id: music-service
       #    uri: lb://music-service
