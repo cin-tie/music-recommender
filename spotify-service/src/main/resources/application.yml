@@ -4,7 +4,10 @@ server:
 spring:
   application:
     name: spotify-service
-
+  data:
+    redis:
+      host: redis
+      port: 6379
 
 eureka:
   client:
@@ -15,6 +18,11 @@ eureka:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
+
+jwt:
+  service:
+    secret: ${JWT_SERVICE_SECRET}
+    expiration: 300000
 
 
 logging:

@@ -19,6 +19,9 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8800
+          envFrom:
+            - secretRef:
+                name: spotify-secret
           resources:
             requests:
               memory: "256Mi"
