@@ -7,6 +7,7 @@ import com.cintie.musicrecommender.authservice.dto.ValidateResponse;
 import com.cintie.musicrecommender.authservice.entities.User;
 import com.cintie.musicrecommender.authservice.repositories.UserRepository;
 import com.cintie.musicrecommender.authservice.services.UserJwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private UserJwtService userJwtService;
     private UserRepository userRepository;
@@ -23,5 +25,14 @@ public class AuthController {
         return ResponseEntity.status(302)
                 .header("Location", "http://localhost:8081/oauth2/authorization/spotify")
                 .build();
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<ValidateResponse> validate(@RequestBody ValidateRequest request){
+        String token = request.token();
+        if(userJwtService.validateToken(token)){
+            return ResponseEntity.ok(new ValidateResponse(true));
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

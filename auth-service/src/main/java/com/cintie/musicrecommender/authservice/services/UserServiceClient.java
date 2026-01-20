@@ -16,7 +16,6 @@ public class UserServiceClient {
 
     public void sync(UserSyncRequest request){
         String serviceToken = serviceJwtService.generateServiceToken("auth-service");
-        System.out.println("\n\n\n\n\n\nGenerated service token: " + serviceToken);
 
         webClient.post()
                 .uri("http://user-service/internal/users/sync")

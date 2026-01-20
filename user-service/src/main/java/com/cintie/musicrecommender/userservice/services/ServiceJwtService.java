@@ -1,4 +1,4 @@
-package com.cintie.musicrecommender.authservice.services;
+package com.cintie.musicrecommender.userservice.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+
 
 @Service
 public class ServiceJwtService {
