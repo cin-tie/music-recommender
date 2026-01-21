@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SpotifyApiClient {
@@ -41,7 +43,21 @@ public class SpotifyApiClient {
 
     public String getSavedTracks(String accessToken){
         return webClient.get()
-                .uri("hhttps://api.spotify.com/v1/me/tracks?limit={limit}", limit)
+                .uri("https://api.spotify.com/v1/me/tracks?limit={limit}", limit)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+
+    public String getAudioFeatures(String accessToken, List<String> trackIds){
+        String ids = String.join(",", trackIds);
+
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("https://api.spotify.com/v1/audio-features")
+                        .queryParam("ids", ids)
+                        .build())
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(String.class)
