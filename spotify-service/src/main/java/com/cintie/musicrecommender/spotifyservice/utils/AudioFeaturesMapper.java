@@ -11,7 +11,7 @@ public class AudioFeaturesMapper {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static List<AudioFeatures> fromSpotify(String json){
+    public static List<AudioFeatures> fromSpotify(String json){
         try {
             JsonNode root = objectMapper.readTree(json);
             JsonNode featuresArray = root.get("audio_features");

@@ -50,17 +50,24 @@ public class SpotifyApiClient {
                 .block();
     }
 
-    public String getAudioFeatures(String accessToken, List<String> trackIds){
-        String ids = String.join(",", trackIds);
+    public String getAudioFeatures(String accessToken, List<String> trackIds) {
+        int size = trackIds.size();
+        StringBuilder result = new StringBuilder();
 
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("https://api.spotify.com/v1/audio-features")
-                        .queryParam("ids", ids)
-                        .build())
-                .header("Authorization", "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        for (int i = 0; i < size; i += 100) {
+            String ids = String.join(",", trackIds.subList(i, Math.min(size, i + 100)));
+
+            result.append(webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("https://api.spotify.com/v1/audio-features")
+                            .queryParam("ids", ids)
+                            .build())
+                    .header("Authorization", "Bearer " + accessToken)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block());
+        }
+
+        return result.toString();
     }
 }
