@@ -18,4 +18,14 @@ public class SpotifyController {
     public String recent(@RequestHeader("X-User-Id") String spotifyId){
         return spotifyService.getRecent(spotifyId);
     }
+
+    @GetMapping("/top/tracks")
+    public String topTracks(@RequestHeader("X-User-Id") String spotifyId){
+        return spotifyService.getTopTracks(spotifyId);
+    }
+
+    @GetMapping("/top/artists")
+    public String topArtists(@RequestHeader("X-User-Id") String spotifyId){
+        return spotifyService.getTopArtists(spotifyId);
+    }
 }

@@ -1,6 +1,7 @@
-package com.cintie.musicrecommender.spotifyservice.services;
+package com.cintie.musicrecommender.spotifyservice.clients;
 
 import com.cintie.musicrecommender.spotifyservice.dto.AccessTokenResponse;
+import com.cintie.musicrecommender.spotifyservice.services.ServiceJwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
