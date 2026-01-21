@@ -54,4 +54,18 @@ public class SpotifyService {
         spotifyCacheService.saveTopArtists(spotifyId, data);
         return data;
     }
+
+    public String getSavedTracks(String spotifyId){
+        String cached = spotifyCacheService.getSavedTracks(spotifyId);
+
+        if(cached != null){
+            return cached;
+        }
+
+        String token = authServiceClient.getSpotifyAccessToken(spotifyId).accessToken();
+        String data = spotifyApiClient.getSavedTracks(token);
+
+        spotifyCacheService.saveSavedTracks(spotifyId, data);
+        return data;
+    }
 }

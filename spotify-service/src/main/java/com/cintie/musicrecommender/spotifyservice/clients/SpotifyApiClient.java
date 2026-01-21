@@ -10,9 +10,11 @@ public class SpotifyApiClient {
 
     private final WebClient webClient;
 
+    private final int limit = 50; // TODO: Get all where needed
+
     public String getRecentlyPlayed(String accessToken){
         return webClient.get()
-                .uri("https://api.spotify.com/v1/me/player/recently-played?limit=30")
+                .uri("https://api.spotify.com/v1/me/player/recently-played?limit={limit}", limit)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(String.class)
@@ -21,7 +23,7 @@ public class SpotifyApiClient {
 
     public String getTopTracks(String accessToken){
         return webClient.get()
-                .uri("https://api.spotify.com/v1/me/top/tracks")
+                .uri("https://api.spotify.com/v1/me/top/tracks?limit={limit}", limit)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(String.class)
@@ -30,7 +32,16 @@ public class SpotifyApiClient {
 
     public String getTopArtists(String accessToken){
         return webClient.get()
-                .uri("https://api.spotify.com/v1/me/top/artists")
+                .uri("https://api.spotify.com/v1/me/top/artists?limit={limit}", limit)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+
+    public String getSavedTracks(String accessToken){
+        return webClient.get()
+                .uri("hhttps://api.spotify.com/v1/me/tracks?limit={limit}", limit)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(String.class)

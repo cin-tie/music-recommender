@@ -28,4 +28,9 @@ public class SpotifyController {
     public String topArtists(@RequestHeader("X-User-Id") String spotifyId){
         return spotifyService.getTopArtists(spotifyId);
     }
+
+    @GetMapping("/saved/tracks")
+    public String savedTracks(@RequestHeader("X-User-Id") String spotifyId){
+        return spotifyService.getSavedTracks(spotifyId);
+    }
 }
