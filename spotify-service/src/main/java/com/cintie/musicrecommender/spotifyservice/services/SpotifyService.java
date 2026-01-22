@@ -2,10 +2,12 @@ package com.cintie.musicrecommender.spotifyservice.services;
 
 import com.cintie.musicrecommender.spotifyservice.clients.AuthServiceClient;
 import com.cintie.musicrecommender.spotifyservice.clients.SpotifyApiClient;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,6 +33,30 @@ public class SpotifyService {
     }
 
     public List<String> getRecentTrackIds(String spotifyId){
+        try {
+            String json = getRecent(spotifyId);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            JsonNode items = jsonNode.get("items");
+            if (items == null || !items.isArray()) {
+                return List.of();
+            }
+
+            List<String> trackIds = new ArrayList<>();
+
+            for (JsonNode item : items){
+                JsonNode track = item.get("track");
+                if(track != null && track.hasNonNull("id")){
+                    trackIds.add(track.get("id").asText());
+                }
+            }
+
+            return trackIds;
+        } catch (Exception e){
+            throw new RuntimeException("Failed to parse recent tracks ids", e);
+        }
     }
 
     public String getTopTracks(String spotifyId){
