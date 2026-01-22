@@ -2,8 +2,11 @@ package com.cintie.musicrecommender.spotifyservice.services;
 
 import com.cintie.musicrecommender.spotifyservice.clients.AuthServiceClient;
 import com.cintie.musicrecommender.spotifyservice.clients.SpotifyApiClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,9 @@ public class SpotifyService {
 
         spotifyCacheService.saveRecent(spotifyId, data);
         return data;
+    }
+
+    public List<String> getRecentTrackIds(String spotifyId){
     }
 
     public String getTopTracks(String spotifyId){
