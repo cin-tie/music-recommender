@@ -34,7 +34,6 @@ public class AudioFeaturesCacheService {
                     objectMapper.writeValueAsString(audioFeatures),
                     Duration.ofHours(24)
             );
-        } catch (Exception e){
-        }
+        } catch (Exception e){}
     }
 }
