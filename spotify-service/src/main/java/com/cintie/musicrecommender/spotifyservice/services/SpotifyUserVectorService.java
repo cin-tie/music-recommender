@@ -11,6 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SpotifyUserVectorService {
 
+    // TODO: Analyse also saved, followed artists etc
+
     private final UserVectorCacheService userVectorCacheService;
     private final AudioFeaturesService audioFeaturesService;
     private final SpotifyService spotifyService;
