@@ -23,6 +23,8 @@ spring:
               - user-read-email
               - user-read-private
               - user-read-recently-played
+              - user-top-read
+              - user-library-read
             redirect-uri: "http://127.0.0.1:8081/login/oauth2/code/spotify"
             authorization-grant-type: authorization_code
             client-name: Spotify

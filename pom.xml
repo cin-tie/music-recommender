@@ -31,5 +31,6 @@
         <module>auth-service</module>
         <module>user-service</module>
         <module>spotify-service</module>
+        <module>recommendation-service</module>
     </modules>
 </project>

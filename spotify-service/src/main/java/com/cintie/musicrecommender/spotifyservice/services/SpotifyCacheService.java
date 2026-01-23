@@ -18,6 +18,33 @@ public class SpotifyCacheService {
 
     public void saveRecent(String spotifyId, String data) {
         stringRedisTemplate.opsForValue()
-                .set("recent:" + spotifyId, data, Duration.ofMinutes(2));
+                .set("recent:" + spotifyId, data, Duration.ofMinutes(1));
+    }
+
+    public String getTopTracks(String spotifyId){
+        return stringRedisTemplate.opsForValue().get("topTracks: " + spotifyId);
+    }
+
+    public String getSavedTracks(String spotifyId){
+        return stringRedisTemplate.opsForValue().get("savedTracks: " + spotifyId);
+    }
+
+    public String getTopArtists(String spotifyId){
+        return stringRedisTemplate.opsForValue().get("topArtists: " + spotifyId);
+    }
+
+    public void saveTopTracks(String spotifyId, String data) {
+        stringRedisTemplate.opsForValue()
+                .set("topTracks:" + spotifyId, data, Duration.ofMinutes(2));
+    }
+
+    public void saveSavedTracks(String spotifyId, String data) {
+        stringRedisTemplate.opsForValue()
+                .set("savedTracks:" + spotifyId, data, Duration.ofMinutes(2));
+    }
+
+    public void saveTopArtists(String spotifyId, String data) {
+        stringRedisTemplate.opsForValue()
+                .set("topArtists:" + spotifyId, data, Duration.ofMinutes(2));
     }
 }
