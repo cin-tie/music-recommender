@@ -1,6 +1,7 @@
-package com.cintie.musicrecommender.authservice.services;
+package com.cintie.musicrecommender.authservice.clients;
 
 import com.cintie.musicrecommender.authservice.dto.UserSyncRequest;
+import com.cintie.musicrecommender.authservice.services.ServiceJwtService;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
 import org.springframework.stereotype.Service;
