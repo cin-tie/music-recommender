@@ -70,4 +70,25 @@ public class SpotifyApiClient {
 
         return result.toString();
     }
+
+    public String getTracks(String accessToken, List<String> trackIds){
+        int size = trackIds.size();
+        StringBuilder result = new StringBuilder();
+
+        for(int i = 0; i < size; i += 50){
+            String ids = String.join(",", trackIds.subList(i, Math.min(size, i + 50)));
+
+            result.append(webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("https://api.spotify.com/v1/tracks")
+                            .queryParam("ids", ids)
+                            .build())
+                    .header("Authorization", "Bearer" + accessToken)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block());
+        }
+
+        return result.toString();
+    }
 }
