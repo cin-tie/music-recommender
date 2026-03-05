@@ -38,6 +38,7 @@ public class AudioFeaturesMapper {
                         .build());
             }
 
+            return result;
         } catch (Exception e){
             throw  new RuntimeException("Failed to parse audio features", e);
         }
