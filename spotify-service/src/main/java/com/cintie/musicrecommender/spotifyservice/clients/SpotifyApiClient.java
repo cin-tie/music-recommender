@@ -91,4 +91,13 @@ public class SpotifyApiClient {
 
         return result.toString();
     }
+
+    public String getRecommendations(String accessToken){
+        return webClient.get()
+                .uri("https://api.spotify.com/v1/recommendations?limit={limit}", limit)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 }

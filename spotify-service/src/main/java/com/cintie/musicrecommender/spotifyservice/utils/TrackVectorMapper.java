@@ -12,7 +12,7 @@ public class TrackVectorMapper {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static List<TrackVector> fromSpotify(String jsonTracks, String jsonAudioFeatures){
+    public static List<TrackVector> fromSpotify(String jsonTrack, String jsonAudioFeature){
         try{
             JsonNode root = objectMapper.readTree(jsonTracks);
             JsonNode trackArray = root.get("tracks");

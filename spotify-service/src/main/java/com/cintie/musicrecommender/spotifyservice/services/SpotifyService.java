@@ -100,4 +100,34 @@ public class SpotifyService {
         spotifyCacheService.saveSavedTracks(spotifyId, data);
         return data;
     }
+
+    public String getRecommendations(String spotifyId) {
+        String token = authServiceClient.getSpotifyAccessToken(spotifyId).accessToken();
+        String data = spotifyApiClient.getRecommendations(token);
+
+        return data;
+    }
+
+    public List<String> getRecommendationsTrackIds(String spotifyId) {
+        try {
+            String json = getRecent(spotifyId);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            JsonNode tracks = jsonNode.get("tracks");
+
+            List<String> trackIds = new ArrayList<>();
+
+            for (JsonNode track : tracks){
+                if(track != null && track.hasNonNull("id")){
+                    trackIds.add(track.get("id").asText());
+                }
+            }
+
+            return trackIds;
+        } catch (Exception e){
+            throw new RuntimeException("Failed to parse recent tracks ids", e);
+        }
+    }
 }
