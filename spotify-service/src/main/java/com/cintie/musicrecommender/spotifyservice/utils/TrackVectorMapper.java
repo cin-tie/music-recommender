@@ -12,50 +12,22 @@ public class TrackVectorMapper {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static List<TrackVector> fromSpotify(String jsonTrack, String jsonAudioFeature){
-        try{
-            JsonNode root = objectMapper.readTree(jsonTracks);
-            JsonNode trackArray = root.get("tracks");
+    public static TrackVector fromSpotify(JsonNode trackNode, AudioFeatures features){
+        if(trackNode.isNull()) return null;
 
-            List<TrackVector> result = new ArrayList<>();
-            List<AudioFeatures> audioFeaturesList = AudioFeaturesMapper.fromSpotify(jsonAudioFeatures);
-
-            int i = 0;
-            for(JsonNode node : trackArray){
-                if(node.isNull()) continue;
-
-                AudioFeatures features = audioFeaturesList.get(i);
-
-                String trackId = node.get("id").asText();
-                if (!trackId.equals(features.getTrackId())){
-                    for(AudioFeatures feature : audioFeaturesList){
-                        if(trackId.equals(feature.getTrackId())){
-                            features = feature;
-                            break;
-                        }
-                    }
-                }
-
-                result.add(TrackVector.builder()
-                        .trackId(trackId)
-                        .name(node.get("name").asText())
-                        .artist(node.get("artist").asText())
-                        .acousticness(features.getAcousticness())
-                        .danceability(features.getDanceability())
-                        .energy(features.getEnergy())
-                        .instrumentalness(features.getInstrumentalness())
-                        .liveness(features.getLiveness())
-                        .loudness(features.getLoudness())
-                        .speechiness(features.getSpeechiness())
-                        .tempo(features.getTempo())
-                        .valence(features.getValence())
-                        .build());
-                ++i;
-            }
-
-            return result;
-        } catch (Exception e){
-            throw new RuntimeException("Failed to parse track vector", e);
-        }
+        return  TrackVector.builder()
+                .trackId(trackNode.get("id").asText())
+                .name(trackNode.get("name").asText())
+                .artist(trackNode.get("artist").asText())
+                .acousticness(features.getAcousticness())
+                .danceability(features.getDanceability())
+                .energy(features.getEnergy())
+                .instrumentalness(features.getInstrumentalness())
+                .liveness(features.getLiveness())
+                .loudness(features.getLoudness())
+                .speechiness(features.getSpeechiness())
+                .tempo(features.getTempo())
+                .valence(features.getValence())
+                .build();
     }
 }

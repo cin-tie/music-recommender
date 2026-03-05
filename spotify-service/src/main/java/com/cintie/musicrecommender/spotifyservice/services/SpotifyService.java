@@ -110,7 +110,7 @@ public class SpotifyService {
 
     public List<String> getRecommendationsTrackIds(String spotifyId) {
         try {
-            String json = getRecent(spotifyId);
+            String json = getRecommendations(spotifyId);
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(json);
@@ -128,6 +128,39 @@ public class SpotifyService {
             return trackIds;
         } catch (Exception e){
             throw new RuntimeException("Failed to parse recent tracks ids", e);
+        }
+    }
+
+    public List<String> getTracks(String spotifyId, List<String> trackIds){
+        try {
+            List<String> result = new ArrayList<>();
+            List<String> missing = new ArrayList<>();
+
+            for(String trackId : trackIds){
+                String cached = spotifyCacheService.getTrack(trackId);
+
+                if(cached == null)
+                    missing.add(trackId);
+                else{
+                    result.add(cached);
+                }
+            }
+
+            String token = authServiceClient.getSpotifyAccessToken(spotifyId).accessToken();
+            String data = spotifyApiClient.getTracks(token, missing);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode root = objectMapper.readTree(data);
+            for(JsonNode node : root){
+                String sNode = node.asText();
+                result.add(sNode);
+                spotifyCacheService.saveTrack(node.get("id").asText(), sNode);
+            }
+
+            return result;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse tracks ids", e);
         }
     }
 }
