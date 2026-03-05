@@ -19,15 +19,28 @@ public class SpotifyRecommendationService {
 
     private final SpotifyService spotifyService;
     private final AudioFeaturesService audioFeaturesService;
+    private final SpotifyRecommendationCacheService spotifyRecommendationCacheService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<TrackVector> getRecommendations(String spotifyId){
         List<String> recommendations = spotifyService.getRecommendationsTrackIds(spotifyId);
+        List<String> missed = new ArrayList<>();
 
         List<TrackVector> result = new ArrayList<>();
 
-        List<AudioFeatures> features = audioFeaturesService.getForTracks(spotifyId, recommendations);
-        List<String> tracks = spotifyService.getTracks(spotifyId, recommendations);
+        for(String trackId : recommendations){
+            TrackVector trackVector = spotifyRecommendationCacheService.get(trackId);
+
+            if(trackVector == null){
+                missed.add(trackId);
+            }
+            else{
+                result.add(trackVector);
+            }
+        }
+
+        List<AudioFeatures> features = audioFeaturesService.getForTracks(spotifyId, missed);
+        List<String> tracks = spotifyService.getTracks(spotifyId, missed);
 
         int i = 0;
         try {
