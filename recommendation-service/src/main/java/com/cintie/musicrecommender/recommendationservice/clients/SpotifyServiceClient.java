@@ -35,7 +35,8 @@ public class SpotifyServiceClient {
                 .uri("http://spotify-service/internal/spotify/recommendations/{spotifyId}", spotifyId)
                 .header("Authorization", "Bearer " + serviceToken)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<TrackVector>>(){})
+                .bodyToFlux(TrackVector.class)
+                .collectList()
                 .block();
     }
 }
