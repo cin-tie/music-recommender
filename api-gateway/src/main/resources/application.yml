@@ -38,7 +38,7 @@ spring:
         - id: recommendation-service
           uri: lb://recommendation-service
           predicates:
-            - Path=/api/recommedations
+            - Path=/api/recommendations/**
 
       #  TODO: Needed services
       #  - id: music-service
