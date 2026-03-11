@@ -10,6 +10,8 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.Base64;
+
 @Component
 public class JwtAuthenticationFilter implements WebFilter {
 
@@ -32,8 +34,11 @@ public class JwtAuthenticationFilter implements WebFilter {
 
         String token = authHeader.substring(7);
         try {
+
+            byte[] keyBytes = Base64.getDecoder().decode(secret);
+
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(secret)
+                    .setSigningKey(keyBytes)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();

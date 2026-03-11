@@ -23,7 +23,9 @@ public class SpotifyRecommendationService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<TrackVector> getRecommendations(String spotifyId){
-        List<String> recommendations = spotifyService.getRecommendationsTrackIds(spotifyId);
+        List<String> seedTracks = spotifyService.getRecentTrackIds(spotifyId);
+        List<String> listArtists = spotifyService.getTopArtistIds(spotifyId);
+        List<String> recommendations = spotifyService.getRecommendationsTrackIds(spotifyId, seedTracks, listArtists);
         List<String> missed = new ArrayList<>();
 
         List<TrackVector> result = new ArrayList<>();

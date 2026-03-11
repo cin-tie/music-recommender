@@ -59,6 +59,32 @@ public class SpotifyService {
         }
     }
 
+    public List<String> getTopArtistIds(String spotifyId){
+        try {
+            String json = getTopArtists(spotifyId);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            JsonNode items = jsonNode.get("items");
+            if (items == null || !items.isArray()) {
+                return List.of();
+            }
+
+            List<String> artistIds = new ArrayList<>();
+
+            for (JsonNode item : items){
+                if(item != null && item.hasNonNull("id")){
+                    artistIds.add(item.get("id").asText());
+                }
+            }
+
+            return artistIds;
+        } catch (Exception e){
+            throw new RuntimeException("Failed to parse recent tracks ids", e);
+        }
+    }
+
     public String getTopTracks(String spotifyId){
         String cached = spotifyCacheService.getTopTracks(spotifyId);
 
@@ -101,16 +127,16 @@ public class SpotifyService {
         return data;
     }
 
-    public String getRecommendations(String spotifyId) {
+    public String getRecommendations(String spotifyId, List<String> seedTracks, List<String> listArtists) {
         String token = authServiceClient.getSpotifyAccessToken(spotifyId).accessToken();
-        String data = spotifyApiClient.getRecommendations(token);
+        String data = spotifyApiClient.getRecommendations(token, seedTracks, listArtists);
 
         return data;
     }
 
-    public List<String> getRecommendationsTrackIds(String spotifyId) {
+    public List<String> getRecommendationsTrackIds(String spotifyId, List<String> seedTracks, List<String> listArtists) {
         try {
-            String json = getRecommendations(spotifyId);
+            String json = getRecommendations(spotifyId, seedTracks, listArtists);
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(json);

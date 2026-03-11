@@ -1,11 +1,14 @@
 package com.cintie.musicrecommender.spotifyservice.controller;
 
+import com.cintie.musicrecommender.spotifyservice.dto.TrackVector;
+import com.cintie.musicrecommender.spotifyservice.dto.UserVector;
+import com.cintie.musicrecommender.spotifyservice.services.SpotifyRecommendationService;
 import com.cintie.musicrecommender.spotifyservice.services.SpotifyService;
+import com.cintie.musicrecommender.spotifyservice.services.SpotifyUserVectorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/spotify")
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class SpotifyController {
 
     private final SpotifyService spotifyService;
+    private final SpotifyUserVectorService spotifyUserVectorService;
+    private final SpotifyRecommendationService spotifyRecommendationService;
 
     @GetMapping("/recent")
     public String recent(@RequestHeader("X-User-Id") String spotifyId){

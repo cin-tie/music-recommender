@@ -83,7 +83,7 @@ public class SpotifyApiClient {
                             .path("https://api.spotify.com/v1/tracks")
                             .queryParam("ids", ids)
                             .build())
-                    .header("Authorization", "Bearer" + accessToken)
+                    .header("Authorization", "Bearer " + accessToken)
                     .retrieve()
                     .bodyToMono(String.class)
                     .block());
@@ -92,9 +92,17 @@ public class SpotifyApiClient {
         return result.toString();
     }
 
-    public String getRecommendations(String accessToken){
+    public String getRecommendations(String accessToken, List<String> seedTracks, List<String> listArtists){
+        String trackSeeds = String.join(",", seedTracks.subList(0, Math.min(5, seedTracks.size())));
+        String artistSeeds = String.join(",", listArtists.subList(0, Math.min(5 - Math.min(5, seedTracks.size()), listArtists.size())));
+
         return webClient.get()
-                .uri("https://api.spotify.com/v1/recommendations?limit={limit}", limit)
+                .uri(uriBuilder -> uriBuilder
+                        .path("https://api.spotify.com/v1/recommendations")
+                        .queryParam("limit", limit)
+                        .queryParam("seed_tracks", trackSeeds)
+                        .queryParam("seed_artists", artistSeeds)
+                        .build())
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(String.class)
