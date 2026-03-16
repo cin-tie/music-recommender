@@ -29,9 +29,4 @@ public class InternalSpotifyController {
     public List<TrackVector> getRecommendations(@PathVariable String spotifyId){
         return spotifyRecommendationService.getRecommendations(spotifyId);
     }
-
-    @GetMapping("/test")
-    public String getRecommendations(){
-        return "test";
-    }
 }

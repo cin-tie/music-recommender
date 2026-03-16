@@ -24,14 +24,4 @@ public class RecommendationController {
     public List<RecommendationResponse> recommendations(@RequestHeader("X-User-Id") String spotifyId){
         return recommendationService.recommendations(spotifyId);
     }
-
-    @GetMapping("/user")
-    public UserVector userVector(@RequestHeader("X-User-Id") String spotifyId){
-        return spotifyServiceClient.getUserVector(spotifyId);
-    }
-
-    @GetMapping("/test")
-    public String test(){
-        return spotifyServiceClient.test();
-    }
 }

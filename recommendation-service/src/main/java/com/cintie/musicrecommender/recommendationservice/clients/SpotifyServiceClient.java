@@ -39,15 +39,4 @@ public class SpotifyServiceClient {
                 .collectList()
                 .block();
     }
-
-    public String test(){
-        String serviceToken = serviceJwtService.generateServiceToken("recommendation-service");
-
-        return webClientBuilder.build().get()
-                .uri("http://spotify-service/internal/spotify/test")
-                .header("Authorization", "Bearer " + serviceToken)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-    }
 }
