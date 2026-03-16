@@ -29,11 +29,14 @@ public class InternalServiceJwtFilter extends OncePerRequestFilter {
             return;
         }
 
+        System.out.println(request.getRequestURI());
+
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
+
 
         String token = header.substring(7);
 
@@ -45,16 +48,19 @@ public class InternalServiceJwtFilter extends OncePerRequestFilter {
                 return;
             }
 
+
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     claims.getSubject(),
                     null,
                     List.of(() -> "ROLE_SERVICE")
             );
 
+
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             response.setStatus(401);
         }
     }

@@ -2,6 +2,7 @@ package com.cintie.musicrecommender.spotifyservice.services;
 
 import com.cintie.musicrecommender.spotifyservice.dto.AudioFeatures;
 import com.cintie.musicrecommender.spotifyservice.dto.UserVector;
+import com.cintie.musicrecommender.spotifyservice.utils.UserVectorBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SpotifyUserVectorService {
+
+    // TODO: Analyse also saved, followed artists etc
 
     private final UserVectorCacheService userVectorCacheService;
     private final AudioFeaturesService audioFeaturesService;

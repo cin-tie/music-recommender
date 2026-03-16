@@ -1,4 +1,4 @@
-package com.cintie.musicrecommender.spotifyservice.services;
+package com.cintie.musicrecommender.spotifyservice.utils;
 
 import com.cintie.musicrecommender.spotifyservice.dto.AudioFeatures;
 import com.cintie.musicrecommender.spotifyservice.dto.UserVector;

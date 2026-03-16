@@ -4,7 +4,7 @@ import com.cintie.musicrecommender.authservice.dto.UserSyncRequest;
 import com.cintie.musicrecommender.authservice.entities.User;
 import com.cintie.musicrecommender.authservice.repositories.UserRepository;
 import com.cintie.musicrecommender.authservice.services.UserJwtService;
-import com.cintie.musicrecommender.authservice.services.UserServiceClient;
+import com.cintie.musicrecommender.authservice.clients.UserServiceClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

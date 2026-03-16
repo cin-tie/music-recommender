@@ -1,4 +1,4 @@
-package com.cintie.musicrecommender.spotifyservice.config;
+package com.cintie.musicrecommender.recommendationservice.config;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +17,5 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient(WebClient.Builder builder) {
         return builder.build();
-    }
-
-    @Bean
-    public WebClient spotifyWebClient() {
-        return WebClient.builder()
-                .build();
     }
 }

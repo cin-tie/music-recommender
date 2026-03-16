@@ -59,6 +59,32 @@ public class SpotifyService {
         }
     }
 
+    public List<String> getTopArtistIds(String spotifyId){
+        try {
+            String json = getTopArtists(spotifyId);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            JsonNode items = jsonNode.get("items");
+            if (items == null || !items.isArray()) {
+                return List.of();
+            }
+
+            List<String> artistIds = new ArrayList<>();
+
+            for (JsonNode item : items){
+                if(item != null && item.hasNonNull("id")){
+                    artistIds.add(item.get("id").asText());
+                }
+            }
+
+            return artistIds;
+        } catch (Exception e){
+            throw new RuntimeException("Failed to parse recent tracks ids", e);
+        }
+    }
+
     public String getTopTracks(String spotifyId){
         String cached = spotifyCacheService.getTopTracks(spotifyId);
 
@@ -99,5 +125,68 @@ public class SpotifyService {
 
         spotifyCacheService.saveSavedTracks(spotifyId, data);
         return data;
+    }
+
+    public String getRecommendations(String spotifyId, List<String> seedTracks, List<String> listArtists) {
+        String token = authServiceClient.getSpotifyAccessToken(spotifyId).accessToken();
+        String data = spotifyApiClient.getRecommendations(token, seedTracks, listArtists);
+
+        return data;
+    }
+
+    public List<String> getRecommendationsTrackIds(String spotifyId, List<String> seedTracks, List<String> listArtists) {
+        try {
+            String json = getRecommendations(spotifyId, seedTracks, listArtists);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            JsonNode tracks = jsonNode.get("tracks");
+
+            List<String> trackIds = new ArrayList<>();
+
+            for (JsonNode track : tracks){
+                if(track != null && track.hasNonNull("id")){
+                    trackIds.add(track.get("id").asText());
+                }
+            }
+
+            return trackIds;
+        } catch (Exception e){
+            throw new RuntimeException("Failed to parse recent tracks ids", e);
+        }
+    }
+
+    public List<String> getTracks(String spotifyId, List<String> trackIds){
+        try {
+            List<String> result = new ArrayList<>();
+            List<String> missing = new ArrayList<>();
+
+            for(String trackId : trackIds){
+                String cached = spotifyCacheService.getTrack(trackId);
+
+                if(cached == null)
+                    missing.add(trackId);
+                else{
+                    result.add(cached);
+                }
+            }
+
+            String token = authServiceClient.getSpotifyAccessToken(spotifyId).accessToken();
+            String data = spotifyApiClient.getTracks(token, missing);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode root = objectMapper.readTree(data);
+            for(JsonNode node : root){
+                String sNode = node.asText();
+                result.add(sNode);
+                spotifyCacheService.saveTrack(node.get("id").asText(), sNode);
+            }
+
+            return result;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse tracks ids", e);
+        }
     }
 }
