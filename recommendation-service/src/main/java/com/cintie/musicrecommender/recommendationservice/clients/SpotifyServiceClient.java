@@ -14,13 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SpotifyServiceClient {
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
     private final ServiceJwtService serviceJwtService;
 
     public UserVector getUserVector(String spotifyId){
         String serviceToken = serviceJwtService.generateServiceToken("recommendation-service");
 
-        return webClient.get()
+        return webClientBuilder.build().get()
             .uri("http://spotify-service/internal/spotify/user-vector/{spotifyId}", spotifyId)
             .header("Authorization", "Bearer " + serviceToken)
             .retrieve()
@@ -31,12 +31,23 @@ public class SpotifyServiceClient {
     public List<TrackVector> getRecommendations(String spotifyId){
         String serviceToken = serviceJwtService.generateServiceToken("recommendation-service");
 
-        return webClient.get()
+        return webClientBuilder.build().get()
                 .uri("http://spotify-service/internal/spotify/recommendations/{spotifyId}", spotifyId)
                 .header("Authorization", "Bearer " + serviceToken)
                 .retrieve()
                 .bodyToFlux(TrackVector.class)
                 .collectList()
+                .block();
+    }
+
+    public String test(){
+        String serviceToken = serviceJwtService.generateServiceToken("recommendation-service");
+
+        return webClientBuilder.build().get()
+                .uri("http://spotify-service/internal/spotify/test")
+                .header("Authorization", "Bearer " + serviceToken)
+                .retrieve()
+                .bodyToMono(String.class)
                 .block();
     }
 }

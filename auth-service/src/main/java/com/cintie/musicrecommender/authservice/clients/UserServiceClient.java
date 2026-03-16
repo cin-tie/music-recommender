@@ -11,14 +11,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class UserServiceClient {
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     private final ServiceJwtService serviceJwtService;
 
     public void sync(UserSyncRequest request){
         String serviceToken = serviceJwtService.generateServiceToken("auth-service");
 
-        webClient.post()
+        webClientBuilder.build().post()
                 .uri("http://user-service/internal/users/sync")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + serviceToken)
                 .bodyValue(request)

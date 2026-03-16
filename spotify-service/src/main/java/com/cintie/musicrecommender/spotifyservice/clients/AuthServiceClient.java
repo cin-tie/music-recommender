@@ -10,13 +10,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class AuthServiceClient {
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
     private final ServiceJwtService serviceJwtService;
 
     public AccessTokenResponse getSpotifyAccessToken(String spotifyId){
         String serviceToken = serviceJwtService.generateServiceToken("auth-service");
 
-        return webClient.get()
+        return webClientBuilder.build().get()
                 .uri("http://auth-service/internal/auth/spotify-token/{id}", spotifyId)
                 .header("Authorization", "Bearer " + serviceToken)
                 .retrieve()

@@ -26,7 +26,9 @@ public class SpotifyUserVectorService {
         if(cached != null)
             return cached;
 
+        System.out.println("6");
         List<String> trackIds = spotifyService.getRecentTrackIds(spotifyId);
+        System.out.println("7");
         List<AudioFeatures> audioFeatures = audioFeaturesService.getForTracks(spotifyId, trackIds);
 
         UserVector userVector = userVectorBuilder.build(audioFeatures);

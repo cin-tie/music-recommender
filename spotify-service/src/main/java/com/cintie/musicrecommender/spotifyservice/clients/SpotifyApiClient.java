@@ -10,12 +10,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SpotifyApiClient {
 
-    private final WebClient webClient;
+    private final WebClient spotifyWebClient;
 
     private final int limit = 50; // TODO: Get all where needed
 
     public String getRecentlyPlayed(String accessToken){
-        return webClient.get()
+        return spotifyWebClient.get()
                 .uri("https://api.spotify.com/v1/me/player/recently-played?limit={limit}", limit)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
@@ -24,7 +24,7 @@ public class SpotifyApiClient {
     }
 
     public String getTopTracks(String accessToken){
-        return webClient.get()
+        return spotifyWebClient.get()
                 .uri("https://api.spotify.com/v1/me/top/tracks?limit={limit}", limit)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
@@ -33,7 +33,7 @@ public class SpotifyApiClient {
     }
 
     public String getTopArtists(String accessToken){
-        return webClient.get()
+        return spotifyWebClient.get()
                 .uri("https://api.spotify.com/v1/me/top/artists?limit={limit}", limit)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
@@ -42,7 +42,7 @@ public class SpotifyApiClient {
     }
 
     public String getSavedTracks(String accessToken){
-        return webClient.get()
+        return spotifyWebClient.get()
                 .uri("https://api.spotify.com/v1/me/tracks?limit={limit}", limit)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
@@ -56,17 +56,19 @@ public class SpotifyApiClient {
 
         for (int i = 0; i < size; i += 100) {
             String ids = String.join(",", trackIds.subList(i, Math.min(size, i + 100)));
+            System.out.println(i);
 
-            result.append(webClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("https://api.spotify.com/v1/audio-features")
-                            .queryParam("ids", ids)
-                            .build())
-                    .header("Authorization", "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block());
+            result.append(
+                    spotifyWebClient.get()
+                            .uri("https://api.spotify.com/v1/audio-features?ids={ids}", ids)
+                            .header("Authorization", "Bearer " + accessToken)
+                            .retrieve()
+                            .bodyToMono(String.class)
+                            .block()
+            );
         }
+
+        System.out.println("10");
 
         return result.toString();
     }
@@ -78,7 +80,7 @@ public class SpotifyApiClient {
         for(int i = 0; i < size; i += 50){
             String ids = String.join(",", trackIds.subList(i, Math.min(size, i + 50)));
 
-            result.append(webClient.get()
+            result.append(spotifyWebClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("https://api.spotify.com/v1/tracks")
                             .queryParam("ids", ids)
@@ -96,7 +98,7 @@ public class SpotifyApiClient {
         String trackSeeds = String.join(",", seedTracks.subList(0, Math.min(5, seedTracks.size())));
         String artistSeeds = String.join(",", listArtists.subList(0, Math.min(5 - Math.min(5, seedTracks.size()), listArtists.size())));
 
-        return webClient.get()
+        return spotifyWebClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("https://api.spotify.com/v1/recommendations")
                         .queryParam("limit", limit)

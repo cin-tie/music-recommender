@@ -1,6 +1,8 @@
 package com.cintie.musicrecommender.recommendationservice.controller;
 
+import com.cintie.musicrecommender.recommendationservice.clients.SpotifyServiceClient;
 import com.cintie.musicrecommender.recommendationservice.dto.RecommendationResponse;
+import com.cintie.musicrecommender.recommendationservice.dto.UserVector;
 import com.cintie.musicrecommender.recommendationservice.services.RecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +18,20 @@ import java.util.List;
 public class RecommendationController {
 
     private final RecommendationService recommendationService;
+    private final SpotifyServiceClient spotifyServiceClient;
 
     @GetMapping("/top3")
     public List<RecommendationResponse> recommendations(@RequestHeader("X-User-Id") String spotifyId){
         return recommendationService.recommendations(spotifyId);
+    }
+
+    @GetMapping("/user")
+    public UserVector userVector(@RequestHeader("X-User-Id") String spotifyId){
+        return spotifyServiceClient.getUserVector(spotifyId);
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return spotifyServiceClient.test();
     }
 }
