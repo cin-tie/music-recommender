@@ -54,9 +54,8 @@ public class SpotifyApiClient {
         int size = trackIds.size();
         StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < size; i += 100) {
-            String ids = String.join(",", trackIds.subList(i, Math.min(size, i + 100)));
-            System.out.println(i);
+        for (int i = 0; i < size; i += 50) {
+            String ids = String.join(",", trackIds.subList(i, Math.min(size, i + 50)));
 
             result.append(
                     spotifyWebClient.get()
@@ -67,8 +66,6 @@ public class SpotifyApiClient {
                             .block()
             );
         }
-
-        System.out.println("10");
 
         return result.toString();
     }

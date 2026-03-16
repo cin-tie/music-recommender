@@ -31,10 +31,8 @@ public class AudioFeaturesService {
             }
         }
 
-        System.out.println("8");
         if(!missing.isEmpty()){
             String token = authServiceClient.getSpotifyAccessToken(spotifyId).accessToken();
-            System.out.println("9");
             String data = spotifyApiClient.getAudioFeatures(token, missing);
 
             List<AudioFeatures> fetched = AudioFeaturesMapper.fromSpotify(data);
