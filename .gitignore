@@ -1,1 +1,8 @@
 .idea
+target
+auth-service/k8s/secret.yaml
+postgresql/postgres-secret.yaml
+api-gateway/k8s/secret.yaml
+user-service/k8s/secret.yaml
+recommendation-service/k8s/secret.yaml
+spotify-service/k8s/secret.yaml
